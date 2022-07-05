@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { usePersistentItem } from "./hooks/usePersistentItem";
+import { createPersistentItem, IPersistentItem } from "./lib/createPersistentItem";
+import { PersistenceStrategy } from "./lib/PersistenceStrategy";
+
+function Button(props: { item: IPersistentItem<number>, label: string }) {
+	const clicks = usePersistentItem(props.item);
+
+	return <div style={{ display: "flex", gap: "1rem" }}>
+		<p style={{ width: "12rem" }}>
+			{props.label}
+		</p>
+		<button onClick={() => props.item.update(current => (current ?? 0) + 1)}>
+			Clicked {clicks ?? 0} times
+		</button>
+		<button onClick={() => props.item.set(5)}>
+			Set to 5
+		</button>
+		<button onClick={() => props.item.clear()}>
+			Reset
+		</button>
+	</div>
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div className="App" style={{ padding: "6rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
+			<Button item={localStorageClicks} label="Local storage 1" />
+			<Button item={localStorageClicks} label="Local storage 2" />
+			<Button item={sessionStorageClicks} label="Session storage 1" />
+			<Button item={sessionStorageClicks} label="Session storage 2" />
+			<Button item={serverClicks} label="Server 1" />
+			<Button item={serverClicks} label="Server 2" />
+		</div>
+	);
 }
+
+// Store integer of how many times a button was clicked in session storage
+const sessionStorageClicks = createPersistentItem<number>({
+	key: "clicks",
+	validate: (t: any): t is number => typeof t === "number" && t >= 0,
+	persistenceStrategy: PersistenceStrategy.SessionStorage
+})
+
+// Store integer of how many times a button was clicked in local storage
+const localStorageClicks = createPersistentItem<number>({
+	key: "clicks",
+	validate: (t: any): t is number => typeof t === "number" && t >= 0,
+	persistenceStrategy: PersistenceStrategy.LocalStorage
+})
+
+// Store integer of how many times a button was clicked on server
+const serverClicks = createPersistentItem<number>({
+	key: "clicks",
+	validate: (t: any): t is number => typeof t === "number" && t >= 0,
+	persistenceStrategy: PersistenceStrategy.Server
+})
+
 
 export default App;
