@@ -2,9 +2,8 @@ import { usePersistentItem } from "./hooks/usePersistentItem";
 import { createPersistentItem, IPersistentItem } from "./lib/createPersistentItem";
 import { PersistenceStrategy } from "./lib/PersistenceStrategy";
 
-function Button(props: { item: IPersistentItem<number>, label: string }) {
+function Counter(props: { item: IPersistentItem<number>, label: string }) {
 	const clicks = usePersistentItem(props.item);
-
 	return <div style={{ display: "flex", gap: "1rem" }}>
 		<p style={{ width: "12rem" }}>
 			{props.label}
@@ -24,12 +23,12 @@ function Button(props: { item: IPersistentItem<number>, label: string }) {
 function App() {
 	return (
 		<div className="App" style={{ padding: "6rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
-			<Button item={localStorageClicks} label="Local storage 1" />
-			<Button item={localStorageClicks} label="Local storage 2" />
-			<Button item={sessionStorageClicks} label="Session storage 1" />
-			<Button item={sessionStorageClicks} label="Session storage 2" />
-			<Button item={serverClicks} label="Server 1" />
-			<Button item={serverClicks} label="Server 2" />
+			<Counter item={localStorageClicks} label="Local storage 1" />
+			<Counter item={localStorageClicks} label="Local storage 2" />
+			<Counter item={sessionStorageClicks} label="Session storage 1" />
+			<Counter item={sessionStorageClicks} label="Session storage 2" />
+			<Counter item={serverClicks} label="Server 1" />
+			<Counter item={serverClicks} label="Server 2" />
 		</div>
 	);
 }

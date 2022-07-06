@@ -39,7 +39,7 @@ export function createPersistentItem<T>(options: {
       return options.persistenceStrategy.getSync({
         key: options.key,
         validate: options.validate,
-        deserialize: options.deserialize
+        deserialize: options.deserialize,
       });
     },
 
@@ -48,7 +48,7 @@ export function createPersistentItem<T>(options: {
       return options.persistenceStrategy.get({
         key: options.key,
         validate: options.validate,
-        deserialize: options.deserialize
+        deserialize: options.deserialize,
       });
     },
 
@@ -58,7 +58,7 @@ export function createPersistentItem<T>(options: {
         await options.persistenceStrategy.set({
           value,
           key: options.key,
-          serialize: options.serialize
+          serialize: options.serialize,
         });
         subscribable.publish(value);
       } catch (e) {
@@ -77,7 +77,7 @@ export function createPersistentItem<T>(options: {
         await options.persistenceStrategy.set({
           value,
           key: options.key,
-          serialize: options.serialize
+          serialize: options.serialize,
         });
         subscribable.publish(value);
       } catch (e) {
@@ -97,9 +97,7 @@ export function createPersistentItem<T>(options: {
       }
     },
 
-    // this.subscribable.subscribe wrapper
-    subscribe(listener: (value: T | undefined) => void) {
-      return subscribable.subscribe(listener);
-    }
+    // Subscribe
+    subscribe: subscribable.subscribe,
   };
 }
